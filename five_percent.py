@@ -2,14 +2,18 @@ import pandas as pd
 from ib_insync import *
 
 ib = IB()
-ib.connect(clientId=8)
+ib.connect(clientId=1)
+
+# init dataframe
+df = pd.DataFrame(columns=['date', 'last'])
+df.set_index('date', inplace=True)
 
 
 def new_data(tickers):
     ''' process incoming data and check for trade entry '''
     for ticker in tickers:
         df.loc[ticker.time] = ticker.last
-    print(df)
+
     five_mins_ago = df.index[-1] - pd.Timedelta(minutes=5)
 
     if df.index[0] < five_mins_ago:
@@ -34,10 +38,6 @@ def place_order(direction):
         ib.disconnect()
         quit(0)
 
-
-# init dataframe
-df = pd.DataFrame(columns=['date', 'last'])
-df.set_index('date', inplace=True)
 
 # Create contracts
 mastercard_contract = Stock('MA', 'SMART', 'USD')
