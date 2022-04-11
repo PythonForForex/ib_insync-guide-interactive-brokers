@@ -11,6 +11,9 @@ df.set_index('date', inplace=True)
 
 def new_data(tickers):
     ''' process incoming data and check for trade entry '''
+    
+    global df
+
     for ticker in tickers:
         df.loc[ticker.time] = ticker.last
 
@@ -29,7 +32,7 @@ def new_data(tickers):
             submit_order('SELL')
 
 
-def place_order(direction):
+def submit_order(direction):
     ''' place order with IB - exit if order gets filled '''
     mastercard_order = MarketOrder(direction, 100)
     trade = ib.placeOrder(mastercard_contract, mastercard_order)
